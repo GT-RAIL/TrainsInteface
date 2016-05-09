@@ -352,7 +352,7 @@ $(function() {
 	var enabled = true;
 	var rosQueue = new ROSQUEUE.Queue({
 		ros: _ROS,
-		studyTime: 10000,
+		studyTime: 1000,
 		chatEnabled: true,
 		userId: user_id
  	});
