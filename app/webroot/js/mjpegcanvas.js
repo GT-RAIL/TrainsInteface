@@ -224,11 +224,11 @@ MJPEGCANVAS.Viewer = function(options) {
       context.drawImage(overlay, 0, 0);
     }
 
-    // silly firefox...
-    // if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-    //   var aux = that.image.src.split('?killcache=');
-    //   that.image.src = aux[0] + '?killcache=' + Math.random(42);
-    // }
+    //silly firefox...
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+      var aux = that.image.src.split('?killcache=');
+      that.image.src = aux[0] + '?killcache=' + Math.random(42);
+    }
   }
 
 

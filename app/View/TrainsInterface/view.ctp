@@ -62,7 +62,7 @@ echo $this->Rms->ros($environment['Rosbridge']['uri']);
 echo $this->Rms->initStudy();
 
 echo $this->Html->script(array(
-			'//localhost/widgets/rosqueuejs/build/rosqueue.js'));
+			'http://rail-engine.cc.gatech.edu/widgets/rosqueuejs/build/rosqueue.js'));
 
 echo $this->Rms->tf(
     $environment['Tf']['frame'],
@@ -82,6 +82,7 @@ function fadeAndDisableAll() {
     $("#htn-task-complete").attr('disabled', 'disabled');
     $("#htn-action-select").attr('disabled', 'disabled');
     $("#htn-learned-action-select").attr('disabled', 'disabled');
+    $("#information-disabled-div").css('display','block');
 }
 
 function fadeAndEnableAll() {
@@ -89,6 +90,8 @@ function fadeAndEnableAll() {
     $("#htn-task-frm").fadeTo(500, 1.0);
     $("#htn-task-complete").prop('disabled', false);
     $("#htn-action-select").prop('disabled', false);
+    $("#information-disabled-div").css('display','none');
+    
     $("#htn-learned-action-select").prop('disabled', false);
 }
 
@@ -372,11 +375,17 @@ $(function() {
 
         }
         load_instructions();
-        window.title=window.title+' ACTIVE'
+        
+        document.title='ACTIVE '+document.title
         console.log('queue activated')
         $('#study-page').show();
         $('#queue-waiting').hide();
         $('#experiment-intro').hide();
+        var button_msg = new ROSLIB.Message({
+            button: "start",
+            "parameters":['<?php echo  $user_id?>']
+        });
+        button_topic.publish(button_msg);
 	});
 
 	/**
@@ -400,7 +409,7 @@ $(function() {
 		d.setSeconds(data.sec);
 		d.setMinutes(data.min);
 		//substring removes hours and AM/PM
-		$('#queue-status').html('Your approximate wait time is ' + d.toLocaleTimeString().substring(3, 8));
+		//$('#queue-status').html('Your approximate wait time is ' + d.toLocaleTimeString().substring(3, 8));
         if(data.min<1){
             id(data.sec>0)
                 window.document.title=d.toLocaleTimeString().substring(3, 8)+' to study'
@@ -574,6 +583,7 @@ $(function() {
                         </div>
                     </div>
 
+
                     <div class="alert alert-info" id="current-task-div">
                         <div class="form-group">
                             <div class="col-sm-12">
@@ -611,10 +621,14 @@ $(function() {
                         </span>
                     </div>
                 </form>
+                <div class="alert alert-info col-lg-12" id="information-disabled-div">
+                            <p>Please be patient. The interface will not be active when the robot is working</p>
+               </div>
+
 
                 <div class="text-left">
                     <h4>Task Tree</h4>
-                    Latest task was not completed successfully:<a href="#" id='undo-btn'>Click to Remove it from task tree </a>
+                    Latest task not completed successfully? <a href="#" id='undo-btn'>Click to Remove it from task tree </a>
                     <div class="col-lg-12">
                         <div id="jstree_loading_div" class="alert alert-info">Loading...</div>
                         <div id="jstree_div"></div>
@@ -1118,10 +1132,10 @@ $(function() {
             // Fetch the HTN if a button has been clicked, or an action/param has been selected.
             var jstree_data = null;
 
-            function update_htn() {
+            function start_study() {
                 var button_msg = new ROSLIB.Message({
                     button: "start",
-                    "parameters":[<?php echo  $user_id?>]
+                    "parameters":['<?php echo  $user_id?>']
                 });
                 button_topic.publish(button_msg);
             };
@@ -1133,7 +1147,7 @@ $(function() {
                 // unregistering and publish bug 
                 // TODO: verify problem and find a better solution
                 // https://github.com/RobotWebTools/rosbridge_suite/issues/138
-                 window.setTimeout(update_htn, 3000);
+                 //window.setTimeout(update_htn, 5000);
             });
         });
         </script>

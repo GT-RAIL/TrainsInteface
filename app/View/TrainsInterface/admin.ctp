@@ -132,8 +132,11 @@ var user_id =  <?php echo $user_id;?>
         <div id="jstree_loading_div" class="alert alert-info">Loading...</div>
         <div id="jstree_div"></div>
     </div>
+    <div class='row'>
     <div class='col-lg-12'>
     <button id="remove-user" name="remove-user" class="btn btn-primary">Remove Currently Active User</button>
+    <button id="segment-button" name="segment-button" class="btn btn-primary">Re-segment the objects</button>
+    </div>
     </div>
 </div>
 <div class="col-lg-6">
@@ -259,11 +262,23 @@ var user_id =  <?php echo $user_id;?>
                 $('#chat-text-input').val('');
             });
 
-            //Finish Task Button. Resets the Java Interface
+            //Finish Task Button. Resets the Python Interface
             $("#remove-user").click(function(event){
                 event.preventDefault();
                 var button_msg = new ROSLIB.Message({
                     button: "finishTask"
+                });
+                button_topic.publish(button_msg);
+
+                //TODO: Something happens on Finish
+                //location.reload(); 
+            });
+
+            //segment button resegments the data
+            $("#segment-button").click(function(event){
+                event.preventDefault();
+                var button_msg = new ROSLIB.Message({
+                    button: "segment"
                 });
                 button_topic.publish(button_msg);
 
