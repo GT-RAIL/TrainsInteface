@@ -6,7 +6,7 @@
  *
  * @author		Aaron St. Clair - astclair@gatech.edu
  * @copyright	2015 Georgia Institute of Technology
- * @link		https://github.com/WPI-RAIL/QueueChatInterface
+ * @link		https://github.com/WPI-RAIL/TrainsInterface
  * @since		TrainsInterface v 0.0.1
  * @version		0.0.1
  * @package		app.Controller
@@ -55,6 +55,7 @@ echo $this->Html->css('TrainsInterface');
 
 <?php
 echo $this->Html->script('mjpegcanvas.js');
+echo $this->Html->script('Trains.js');
 // connect to ROS
 echo $this->Rms->ros($environment['Rosbridge']['uri']);
 
@@ -237,15 +238,6 @@ $(function() {
             showFeedback(2, false, "Action failed to execute. Please try again or try another action.");
         }
         fadeAndEnableAll();
-	});
-
-	var pickup_feedback = new ROSLIB.Topic({
-		ros: _ROS,
-		name: '/tablebot_moveit/common_actions/pickup/feedback',
-		messageType: 'rail_manipulation_msgs/PickupActionFeedback'
-	});
-	pickup_feedback.subscribe(function (message){
-		showFeedback(0,false,message.feedback.message);
 	});
 
     //this function is called to give the analytics back to the user 
@@ -526,7 +518,7 @@ $(function() {
         <p>You are in the queue for the experiment.</p>
     </div>
     <div id="queue-status"></div>
-    <div id='chat-display' ></div>
+   <!--<div id='chat-display' ></div>-->
 </section>
 <section class="wrapper style4 container" id="study-page" style="display: none">
 
@@ -542,7 +534,6 @@ $(function() {
                                 <input type="text" id="htn-task-name" name="htn-task-name" class="form-control" placeholder="PackLunch" value="PackLunch"/>
                             </div>
                         </div>
-
                         <div class="form-group" id="teach-task-div">
                             <label class="col-sm-3 control-label" for="htn-teach-task"></label>
                             <div class="col-sm-3">
@@ -550,13 +541,12 @@ $(function() {
                                 
                             </div>
                             <div class="col-sm-3">
-                                <button id="htn-task-complete" name="htn-task-complete" class="btn btn-danger">Task Complete</button>
+                                <button id="htn-task-complete" name="htn-task-complete" class="btn btn-danger">Save as Learned Action</button>
                             </div>
                             <div class="col-sm-3">
                                 <button id="task-instructions" name="task-instructions" class="btn btn-primary">Instructions</button>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="alert alert-info" id="htn-action-select-div">
@@ -622,7 +612,7 @@ $(function() {
                     </div>
                 </form>
                 <div class="alert alert-info col-lg-12" id="information-disabled-div">
-                            <p>Please be patient. The interface will not be active when the robot is working</p>
+                            <p>Please be patient. The interface will not be active when the robot is working. DO NOT refresh the page</p>
                </div>
 
 
@@ -644,11 +634,17 @@ $(function() {
                 <div id="feedback" class="col-lg-12">
             Ready
                 </div>
-                <div id="feedback" class="col-lg-12 feedback-overlay hidden">
-            ERROR:
+                <div class="col-lg-12">
+                    <div id="chat-container" class="chat-container">
+                        <h4 class="chat-title">Chat With Us</h4>
+                        <div id="chat-display" class="chat-display"> 
+                        </div>
+                        <span>
+                            <textarea id="chat-text-input" class="chat-text-input" placeholder="Begin typing to chat..."  ></textarea>
+                        </span>
+                    </div>
                 </div>
             </div>
-        
 
         </div>
 
@@ -927,7 +923,7 @@ $(function() {
             }
 
             function load_instructions(){
-                var message={'question':'<h3>Welcome to the TRAINS Study.</h3><p>This is a Lunch Packing task. Please use the actions to complete the task.</p><p> You have 2 lunchboxes given to you. Please put one main item (soup or tuna), one snack (raisins, cookies or Cheezits), one beverage (Coffee, Milk, Chocolate Milk) and one fruit (peaches, apple or lemon) in each one of the lunchboxes</p><p>You can use any of the actions given to you to acheive this. The robot will learn complex actions along the way, which you can make use of</p>','answers':[]}
+                var message={'question':'<h3>Welcome to the TRAINS Study.</h3><p>This is a Lunch Packing task. Please use the actions to complete the task.</p><p> You have 2 lunchboxes given to you. Please put one main item (soup or tuna), one snack (raisins, cookies or Cheezits), one beverage (Coffee, Milk, Chocolate Milk) and one fruit (peaches, apple or lemon) in each one of the lunchboxes</p><p>You can use any of the actions given to you to acheive this. The robot will learn complex actions along the way, which you can make use of</p><br/><h4>How to Get Started & Other Tips:</h4><p><ol><li>1. Click on New Task button to get started</li><li>2. At any point you can press Finish Task and Store as a Learned Action</li></ol> </p>','answers':[]}
                 updateQuestionModal(message);
             }
 
@@ -1192,16 +1188,11 @@ $(function() {
                 if(event.keyCode == 13) {
                     //rosQueue.sendChat($('#chat-text-input').val());
 
-                    chat_topic.publish(new ROSLIB.Message({data:$('#chat-text-input').val()}));
+                    chat_topic.publish(new ROSLIB.Message({data:'<b>Me:</b>'+$('#chat-text-input').val(),}));
                     $('#chat-text-input').val('');
                 }
             });
 
-            $('#chat-send').click(function() {
-                //rosQueue.sendChat($('#chat-text-input').val());
-                chat_topic.publish(new ROSLIB.Message({data:$('#chat-text-input').val()}));
-                $('#chat-text-input').val('');
-            });
         </script>
 	</div>
 </section>

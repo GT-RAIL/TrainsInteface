@@ -121,7 +121,55 @@ $(function() {
 var user_id =  <?php echo $user_id;?>
 </script>
 
-
+<!-- chat css - TODO: move to widget -->
+<style>
+.chat-container {
+    width: 400px;
+}
+.chat-display {
+    height: 100px;
+    background: white;
+    resize: both;
+    overflow: auto;
+    padding: 0;
+    margin: 0;
+}
+.chat-from-self, .chat-from-other {
+    padding: 5px;
+    margin: 5px;
+}
+.chat-from-self {
+    color: black;
+    float: left;
+    border-radius: 5px;
+    background: #8AC007;
+    clear:   both;
+}
+.chat-from-other {
+    color: black;
+    float: right;
+    text-align: left;
+    border-radius: 5px;
+    background: skyblue;
+    clear:   both;
+}
+.chat-text-input {
+    float: left;
+    width: 400px;
+    background: white;
+    border-top: 1px solid grey;
+    padding: 0px;
+    margin: 0px;
+}
+.chat-btn {
+    float: right;
+    width: 50px;
+    padding: 0;
+    margin: 0;
+    height: 34px;
+    line-height:normal !important;
+}
+</style>
 
 
 
@@ -146,8 +194,15 @@ var user_id =  <?php echo $user_id;?>
     <div id="feedback" class="col-lg-12">
     Ready
     </div>
-    <div id="feedback" class="col-lg-12 feedback-overlay hidden">
-        ERROR:
+    <div class="col-lg-12">
+        <div id="chat-container" class="chat-container">
+            <h4 class="chat-title">Chat With Us</h4>
+            <div id="chat-display" class="chat-display"> 
+            </div>
+            <span>
+                <textarea id="chat-text-input" class="chat-text-input" placeholder="Begin typing to chat..."  ></textarea>
+            </span>
+        </div>
     </div>
 </div>
 
@@ -162,7 +217,15 @@ var user_id =  <?php echo $user_id;?>
             });
             button_topic.advertise();
 
- 
+            var pickup_feedback = new ROSLIB.Topic({
+                ros: _ROS,
+                name: '/tablebot_moveit/common_actions/pickup/feedback',
+                messageType: 'rail_manipulation_msgs/PickupActionFeedback'
+            });
+            pickup_feedback.subscribe(function (message){
+                showFeedback(0,false,message.feedback.message);
+            });
+
 			var htn_topic = new ROSLIB.Topic({
 				ros : _ROS,
 				name : '/web_interface/htn',
@@ -178,6 +241,49 @@ var user_id =  <?php echo $user_id;?>
                 // Send the htn string over to the PHP server for storage
                 $.post('/Storage/store_htn', { htn: htn_string, user_id: <?php echo $userId == null ? 0 : $userId;?> }).fail(console.error);
             });
+
+            /**
+             * display feedback to the user. Feedback has a string to display and a severity level (0-3).
+             * 0 - debug. will be displayed under the interface in smaller test
+             * 2 - error. will be overlayed on the interface
+             * 3 - fatal. will be overlayed on the interface in red
+             */
+
+            function showFeedback(severity,resolved,message) {
+                var feedback = document.getElementById('feedback');
+                var feedbackOverlay = document.getElementById('important-feedback');
+                var fatalFeedbackOverlay = document.getElementById('fatal-feedback');
+
+                switch (severity) {
+                    case 2:
+                        if (resolved) {
+                            fatalFeedbackOverlay.className = 'feedback-overlay fatal hidden';
+                            feedbackOverlay.className = 'feedback-overlay hidden';
+                        }
+                        else {
+                            fatalFeedbackOverlay.className = 'feedback-overlay fatal';
+                            fatalFeedbackOverlay.innerHTML = message;
+                        }
+                        break;
+
+                    case 1:
+                        if (resolved) {
+                            feedbackOverlay.className = 'feedback-overlay hidden';
+                        }
+                        else {
+                            feedbackOverlay.className = 'feedback-overlay';
+                            feedbackOverlay.innerHTML = message;
+                        }
+                        break;
+
+                    case 0:
+                        feedback.innerHTML += message;
+                        feedback.innerHTML += '<br/><br/>';
+                        //this will keep the div scrolled to the bottom
+                        feedback.scrollTop = feedback.scrollHeight;
+                }
+
+            }
 
 			function create_jstree_data(htn) {
 				var data = htn.map(function(node) {
@@ -250,17 +356,11 @@ var user_id =  <?php echo $user_id;?>
                 event.preventDefault();
                 if(event.keyCode == 13) {
                     //rosQueue.sendChat($('#chat-text-input').val());
-
-                    chat_topic.publish(new ROSLIB.Message({data:$('#chat-text-input').val()}));
+                    chat_topic.publish(new ROSLIB.Message({data:'<b>Experimenter:</b>'+$('#chat-text-input').val()}));
                     $('#chat-text-input').val('');
                 }
             });
 
-            $('#chat-send').click(function() {
-                //rosQueue.sendChat($('#chat-text-input').val());
-                chat_topic.publish(new ROSLIB.Message({data:$('#chat-text-input').val()}));
-                $('#chat-text-input').val('');
-            });
 
             //Finish Task Button. Resets the Python Interface
             $("#remove-user").click(function(event){
