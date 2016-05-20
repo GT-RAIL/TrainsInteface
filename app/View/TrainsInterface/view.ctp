@@ -923,7 +923,7 @@ $(function() {
             }
 
             function load_instructions(){
-                var message={'question':'<h3>Welcome to the TRAINS Study.</h3><p>This is a Lunch Packing task. Please use the actions to complete the task.</p><p> You have 2 lunchboxes given to you. Please put one main item (soup or tuna), one snack (raisins, cookies or Cheezits), one beverage (Coffee, Milk, Chocolate Milk) and one fruit (peaches, apple or lemon) in each one of the lunchboxes</p><p>You can use any of the actions given to you to acheive this. The robot will learn complex actions along the way, which you can make use of</p><br/><h4>How to Get Started & Other Tips:</h4><p><ol><li>1. Click on New Task button to get started</li><li>2. At any point you can press Finish Task and Store as a Learned Action</li></ol> </p>','answers':[]}
+                var message={'question':'<h3>Welcome to the TRAINS Study.</h3><p>This is a Lunch Packing task. Please use the actions to complete the task.</p><p> You have 2 lunchboxes given to you. Please put one main item (noodles, soup or tuna), one snack or fruit (eg. apple, lemon, raisins, cookies or Cheezits) and one beverage (eg .Coffee, Milk, Chocolate Milk) in each one of the lunchboxes</p><p>You can use any of the actions given to you to acheive this. The robot will learn complex actions along the way, which you can make use of</p><br/><h4>How to Get Started & Other Tips:</h4><p><ol><li>1. Click on New Task button to get started</li><li>2. At any point you can press Finish Task and Store as a Learned Action</li></ol> </p>','answers':[]}
                 updateQuestionModal(message);
             }
 
