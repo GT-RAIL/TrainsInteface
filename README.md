@@ -1,9 +1,7 @@
 TRAINS rms [![Build Status](https://api.travis-ci.org/WPI-RAIL/rms.png)](https://travis-ci.org/GT-RAIL/rms)
 ===
 
-#### RMS (Robot Management System)
-
-RMS is a remote lab and user study management tool designed for use with controlling ROS enabled robots from the web. RMS is built on-top of the popular [CakePHP](http://cakephp.org/) Model-View-Controller (MVC) framework.
+This is a fork of the Robot Management System that contains the TrainsInterface
 
 For full documentation, see [the ROS wiki](http://ros.org/wiki/rms) or check out some [tutorials](http://www.ros.org/wiki/rms/#Tutorials).
 
