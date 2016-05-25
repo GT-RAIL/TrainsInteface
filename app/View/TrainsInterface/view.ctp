@@ -196,7 +196,7 @@ $(function() {
 		topics: <?php echo $streamTopics; ?>,
 		labels: <?php echo $streamNames; ?>,
         tfObject:_TF,
-        tf:'arm_mount_plate_link'
+        tf:'/arm_mount_plate_link'
 	});
     //add a set of interactive markers
     mjpegcanvas.addTopic('/tablebot_interactive_manipulation/update_full','visualization_msgs/InteractiveMarkerInit')
@@ -342,7 +342,7 @@ $(function() {
 </script>
 
 <script>
-        var user_id =  <?php echo $user_id;?>
+    var user_id =  <?php echo $user_id;?>
 
 	var enabled = true;
 	var rosQueue = new ROSQUEUE.Queue({
@@ -537,11 +537,11 @@ $(function() {
                         <div class="form-group" id="teach-task-div">
                             <label class="col-sm-3 control-label" for="htn-teach-task"></label>
                             <div class="col-sm-3">
-                                <button id="htn-teach-task" name="htn-teach-task" class="btn btn-success">Teach</button>
+                                <button id="htn-teach-task" name="htn-teach-task" class="btn btn-success">New Task</button>
                                 
                             </div>
                             <div class="col-sm-3">
-                                <button id="htn-task-complete" name="htn-task-complete" class="btn btn-danger">Save as Learned Action</button>
+                                <button id="htn-task-complete" name="htn-task-complete" class="btn btn-danger">Save as Task</button>
                             </div>
                             <div class="col-sm-3">
                                 <button id="task-instructions" name="task-instructions" class="btn btn-primary">Instructions</button>
@@ -632,7 +632,7 @@ $(function() {
                 </div>
                 <h4>System Status</h4>
                 <div id="feedback" class="col-lg-12">
-            Ready
+                    Ready
                 </div>
                 <div class="col-lg-12">
                     <div id="chat-container" class="chat-container">
@@ -923,7 +923,7 @@ $(function() {
             }
 
             function load_instructions(){
-                var message={'question':'<h3>Welcome to the TRAINS Study.</h3><p>This is a Lunch Packing task. Please use the actions to complete the task.</p><p> You have 2 lunchboxes given to you. Please put one main item (soup or tuna), one snack (raisins, cookies or Cheezits), one beverage (Coffee, Milk, Chocolate Milk) and one fruit (peaches, apple or lemon) in each one of the lunchboxes</p><p>You can use any of the actions given to you to acheive this. The robot will learn complex actions along the way, which you can make use of</p><br/><h4>How to Get Started & Other Tips:</h4><p><ol><li>1. Click on New Task button to get started</li><li>2. At any point you can press Finish Task and Store as a Learned Action</li></ol> </p>','answers':[]}
+                var message={'question':'<h3>Welcome to the TRAINS Study.</h3><p>This is a Lunch Packing task. Please use the actions to complete the task.</p><p> You have 2 lunchboxes given to you. Please put one main item (soup or tuna), one snack or fruit(raisins, cookies or Cheezits, peaches, apple or lemon) and one beverage (Coffee, Milk, Chocolate Milk) in each one of the lunchboxes</p><p>You can use any of the actions given to you to acheive this. The robot will learn complex actions along the way, which you can make use of</p><br/><h4>How to Get Started & Other Tips:</h4><p><ol><li>1. Click on New Task button to get started</li><li>2. At any point you can press Save Task and Store as a Learned Action</li><li>3. The video feed on the right shows which items are available</li><li>4. Sometimes if there are too many objects in an area, you might not be able to pick that object up</li></ol> </p>','answers':[]}
                 updateQuestionModal(message);
             }
 

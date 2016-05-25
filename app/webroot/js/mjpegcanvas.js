@@ -323,10 +323,10 @@ MJPEGCANVAS.Viewer = function(options) {
     var mjepoverlay_feedback = new ROSLIB.Topic({
         ros: _ROS,
         name: name,
-        messageType: messageType
+        messageType: messageType,
+        throttle_rate:3800 //message is throttled as it is sent too fast and wastes bandwidth
     });
     mjepoverlay_feedback.subscribe(function (message){
-
         var present=false;
         //test if there are any markers present
         var testMarker= message.markers[0];
@@ -455,21 +455,24 @@ MJPEGCANVAS.Button.prototype.redraw = function(options) {
   streamMenu.setAttribute('name', 'stream');
   // add each option
   for ( var i = 0; i < options.topics.length; i++) {
-    var option = document.createElement('option');
-    // check if this is the selected option
-    if (options.topics[i] === options.currentTopic) {
-      option.setAttribute('selected', 'selected');
+    //We cannot use Side view in this experiment.
+    if(options.labels[i]!='Side'){
+      var option = document.createElement('option');
+      // check if this is the selected option
+      if (options.topics[i] === options.currentTopic) {
+        option.setAttribute('selected', 'selected');
+      }
+      option.setAttribute('value', options.topics[i]);
+    
+      // check for a label
+      if (options.labels) {
+        option.innerHTML = options.labels[i];
+      } 
+      else {
+        option.innerHTML +=  options.topics[i];
+      }
+      streamMenu.appendChild(option);
     }
-    option.setAttribute('value', options.topics[i]);
-    // check for a label
-    if (options.labels) {
-      option.innerHTML = options.labels[i];
-    } 
-    else {
-      option.innerHTML +=  options.topics[i];
-    }
-    streamMenu.appendChild(option);
-
   }
   streamLabel.appendChild(streamMenu)
   streamMenu.addEventListener('click', function() {

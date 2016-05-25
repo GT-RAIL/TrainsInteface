@@ -14,8 +14,6 @@ App::uses('InterfaceController', 'Controller');
  * @package		app.Controller
  */
 class PuzzleBotInterfaceController extends InterfaceController {
-
-
 /**
  * The basic view action. All necessary variables are set in the main interface controller.
  *
