@@ -51,7 +51,19 @@
                 messageType: 'geometry_msgs/Twist'
         });
         cartesian_move_topic.advertise();
-        var size = 500
+
+        //this is the topic that gets you the co-ordinates of the robot arm
+        var robot_move_topic = new ROSLIB.Topic({
+        	ros:_ROS,
+        	name: ' /tablebot_interactive_manipulation/update',
+        	messageType:'visualization_msgs/InteractiveMarkerUpdate'
+        })
+
+        robot_move_topic.subscribe(function (message) {
+            console.log(message) //TODO replace by storing linear and angular components
+        });
+
+        var size = 500 // width of the canvas 
 		<?php
 			$streamTopics = '[';
 			$streamNames = '[';
