@@ -61,4 +61,8 @@ class TrainsInterfaceController extends InterfaceController {
 
 		$this->set('userId', $this->Auth->user('id'));
 	}
+
+	public function poststudy(){
+
+	}
 }

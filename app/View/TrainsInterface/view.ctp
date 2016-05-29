@@ -531,7 +531,7 @@ $(function() {
                         <div class="form-group" id="teach-task-name-div">
                             <label class="col-sm-3 control-label" for="htn-task-name">Task Name</label>
                             <div class="col-sm-6">
-                                <input type="text" id="htn-task-name" name="htn-task-name" class="form-control" placeholder="PackLunch" value="PackLunch"/>
+                                <input type="text" id="htn-task-name" name="htn-task-name" class="form-control" placeholder="Pack Lunch 1 | Put Apple in Box" value=""/>
                             </div>
                         </div>
                         <div class="form-group" id="teach-task-div">
@@ -541,7 +541,7 @@ $(function() {
                                 
                             </div>
                             <div class="col-sm-3">
-                                <button id="htn-task-complete" name="htn-task-complete" class="btn btn-danger">Save as Learned Action</button>
+                                <button id="htn-task-complete" name="htn-task-complete" class="btn btn-default">Save as Action</button>
                             </div>
                             <div class="col-sm-3">
                                 <button id="task-instructions" name="task-instructions" class="btn btn-primary">Instructions</button>
@@ -647,30 +647,6 @@ $(function() {
             </div>
 
         </div>
-
-<!--
-                <div class="col-lg-4">
-                    <div id="chat-container" class="chat-container">
-                        <h4 class="chat-title">Chat</h4>
-                        <div id="chat-display" class="chat-display"> 
-                        </div>
-                        <span>
-                            <textarea id="chat-text-input" class="chat-text-input" placeholder="Begin typing to chat..."  ></textarea>
-                        </span>
-                    </div>
-                </div>
--->
-
-
-<!--
-         <div class='row'>
-            <div class='col-lg-6'>
-            </div>
-            
-            <div class='col-lg-6'>           
-            </div>
-        </div>
--->
 
          <div class='row'>
             <div class='col-lg-12'>           
@@ -829,8 +805,6 @@ $(function() {
             // Bind to click event of all response buttons in modal dialog
             // and send response message back to heres-how
             $(document.body).on("click", "#question-answer-div button", function(event) {
-                var question = current_question; 
-                var response = '';
 
                 // Check for the rename question
                 if( $("#question-task-name").length > 0 ) {
@@ -845,8 +819,18 @@ $(function() {
                     response = $(this).text();
                 }
 
+                if (current_question.startsWith('<p>This button will end the study')){
+                    answer=$(this).text().toLowerCase().trim()
+                    if(answer=='Yes, I\'m Sure.'){
+                        var button_msg = new ROSLIB.Message({
+                            button: "finishTask"
+                        });
+                        button_topic.publish(button_msg);
+
+                    }
+                }
                 //if it is a substitution then block & none until execution over
-                if(current_question.startsWith('Substitution:')){
+                else if(current_question.startsWith('Substitution:')){
                     answer=$(this).text().toLowerCase().trim()
                     //if the answer is not none block it.
                     if(!(answer=="none. undo!" || answer=='no alternatives detected, okay.'))
@@ -923,7 +907,7 @@ $(function() {
             }
 
             function load_instructions(){
-                var message={'question':'<h3>Welcome to the TRAINS Study.</h3><p>This is a Lunch Packing task. Please use the actions to complete the task.</p><p> You have 2 lunchboxes given to you. Please put one main item (noodles, soup or tuna), one snack or fruit (eg. apple, lemon, raisins, cookies or Cheezits) and one beverage (eg .Coffee, Milk, Chocolate Milk) in each one of the lunchboxes</p><p>You can use any of the actions given to you to acheive this. The robot will learn complex actions along the way, which you can make use of</p><br/><h4>How to Get Started & Other Tips:</h4><p><ol><li>1. Click on New Task button to get started</li><li>2. At any point you can press Finish Task and Store as a Learned Action</li></ol> </p>','answers':[]}
+                var message={'question':'<h3>Hi, Welcome to the TRAINS Study.</h3><p>You are trying to teach Tablebot to pack a lunch. Demonstrate to him what packing a lunch looks like from the basic tasks. Then use that task to pack a second lunch. </p><p> You have 2 lunchboxes given to you. Please put one main item (noodles, soup or tuna), one snack or fruit (eg. apple, lemon, raisins, cookies or Cheezits) and one beverage (eg .Coffee, Milk, Chocolate Milk) in each one of the lunchboxes</p><p>You can use any of the actions given to you to acheive this. The robot will learn complex actions along the way, which you can make use of</p><br/><h4>How to Get Started & Other Tips:</h4><p><ol><li>1. Click on Teach button to get started</li><li>2. At any point you can press Save Task and Store as a Learned Action</li><li>3. The robot will not be able to pick up some objects if it thinks others are in the way</p></ol> </p>','answers':[]}
                 updateQuestionModal(message);
             }
 
@@ -1069,13 +1053,8 @@ $(function() {
             //Finish Task Button. Resets the Java Interface
             $("#finish-task-btn").click(function(event){
                 event.preventDefault();
-                var button_msg = new ROSLIB.Message({
-                    button: "finishTask"
-                });
-                button_topic.publish(button_msg);
-
-                //TODO: Something happens on Finish
-                //location.reload(); 
+                var message={'question':'<p>This button will end the study. Are you sure you are done with the task? </p>','answers':['Yes, I\'m Sure.','No. Go back']}
+                updateQuestionModal(message);
             });
 
             // Execute button: publishes execute action msg with action name and array of inputs

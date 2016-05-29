@@ -48,7 +48,7 @@ abstract class InterfaceController extends AppController {
 		$this->Auth->allow('view');
 
 		// check the request
-		if (($this->request['action'] === 'view' || $this->request['action'] === 'admin') && isset($this->request['pass'][0])) {
+		if (($this->request['action'] === 'view' || $this->request['action'] === 'admin' || $this->request['action'] === 'poststudy') && isset($this->request['pass'][0])) {
 			// grab the environment we need
 			$this->Environment->recursive = 3;
 			$environment = $this->Environment->findById($this->request['pass'][0]);
