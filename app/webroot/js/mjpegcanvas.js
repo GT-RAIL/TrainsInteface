@@ -286,12 +286,13 @@ MJPEGCANVAS.Viewer = function(options) {
   //this is a helper function that takes in a co-ordinate frame and transforms the co-ordinates to 
   //another frame system
   function convertWorldCoordinatesToImageCoordinates(transform,x,y,z,width,height){
-    x=x+transform.translation.x;
-    y=y+transform.translation.y;
-    z=z+transform.translation.z;
-    x=x + x* Math.cos(transform.rotation.z) * Math.sin(transform.rotation.y)
-    y=y + y*  Math.sin(transform.rotation.z)
-    z=z + z* Math.cos(transform.rotation.z) * Math.cos(transform.rotation.y)
+    x=x-transform.translation.x;
+    y=y-transform.translation.y;
+    z=z-transform.translation.z;
+    //1.5707963268 is pi / 2
+    x=x - x* Math.cos((transform.rotation.z*1.5707963268)) * Math.sin(transform.rotation.y*1.5707963268)
+    y=y - y*  Math.sin((transform.rotation.z*1.5707963268))
+    z=z + z* Math.cos(transform.rotation.z*1.5707963268) * Math.cos(transform.rotation.y*1.5707963268)
    return {x:((1+(x))*(width/2)),y:(height)*(1-(y)),z:z}
   
 }

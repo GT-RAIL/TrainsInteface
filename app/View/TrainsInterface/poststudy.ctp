@@ -56,7 +56,7 @@ echo $this->Html->css('TrainsInterface');
             <p>
             <label>ID:</label><input type='text' id='crowdflower_id'/>  
             <div style='display:none' id='crowdlower_code'>
-                TA3LE30T STU0Y
+                TA3LE30T STU0Y<?php echo $user_id?>
             </div>
             </p>
             <p>

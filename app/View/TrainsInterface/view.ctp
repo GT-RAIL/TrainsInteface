@@ -517,8 +517,6 @@ $(function() {
     <div>
         <p>You are in the queue for the experiment.</p>
     </div>
-    <div id="queue-status"></div>
-   <!--<div id='chat-display' ></div>-->
 </section>
 <section class="wrapper style4 container" id="study-page" style="display: none">
 
@@ -805,7 +803,7 @@ $(function() {
             // Bind to click event of all response buttons in modal dialog
             // and send response message back to heres-how
             $(document.body).on("click", "#question-answer-div button", function(event) {
-
+                question=current_question
                 // Check for the rename question
                 if( $("#question-task-name").length > 0 ) {
                     // If "No Change" was clicked send a blank response 
