@@ -264,7 +264,7 @@ $(function() {
         'data':{
             'type' :'string',//'string', //options: string json numeric score
             'label':'trains',
-            'entry' :'starting study'
+            'entry' :'{data:startingstudy,user_id:<?php echo $user_id;?>}'
         },
         success: function () {
           console.log('Logging Started!')
@@ -747,7 +747,7 @@ $(function() {
                 current_question = message.question;
 
                 if(message.question=='User End'){
-                    window.location.href = "/";
+                    window.location.href = "/TrainsInterface/poststudy/1";
                 }
                 // Check for an AskForTaskName question and add a textbox for task name 
                 if(message.answers.length > 0 && message.answers[0] == "AskForTaskName") {
@@ -821,7 +821,8 @@ $(function() {
 
                 if (current_question.startsWith('<p>This button will end the study')){
                     answer=$(this).text().toLowerCase().trim()
-                    if(answer=='Yes, I\'m Sure.'){
+                    console.log(answer)
+                    if(answer=='yes, i\'m sure.'){
                         var button_msg = new ROSLIB.Message({
                             button: "finishTask"
                         });
@@ -829,19 +830,23 @@ $(function() {
 
                     }
                 }
-                //if it is a substitution then block & none until execution over
-                else if(current_question.startsWith('Substitution:')){
-                    answer=$(this).text().toLowerCase().trim()
-                    //if the answer is not none block it.
-                    if(!(answer=="none. undo!" || answer=='no alternatives detected, okay.'))
-                        fadeAndDisableAll();
+                else{
+                    //if it is a substitution then block & none until execution over
+                    if(current_question.startsWith('Substitution:')){
+                        answer=$(this).text().toLowerCase().trim()
+                        //if the answer is not none block it.
+                        if(!(answer=="none. undo!" || answer=='no alternatives detected, okay.'))
+                            fadeAndDisableAll();
+                    }                
+                    var response_msg = new ROSLIB.Message({
+                        question: question,
+                        answer: response
+                    });
                 }
-                var response_msg = new ROSLIB.Message({
-                    question: question,
-                    answer: response
-                });
+
 
                 response_topic.publish(response_msg);
+
 
                 setTimeout(function(){
                     update_learned_actions();
@@ -907,6 +912,7 @@ $(function() {
             }
 
             function load_instructions(){
+                questions='Instructions'
                 var message={'question':'<h3>Hi, Welcome to the TRAINS Study.</h3><p>You are trying to teach Tablebot to pack a lunch. Demonstrate to him what packing a lunch looks like from the basic tasks. Then use that task to pack a second lunch. </p><p> You have 2 lunchboxes given to you. Please put one main item (noodles, soup or tuna), one snack or fruit (eg. apple, lemon, raisins, cookies or Cheezits) and one beverage (eg .Coffee, Milk, Chocolate Milk) in each one of the lunchboxes</p><p>You can use any of the actions given to you to acheive this. The robot will learn complex actions along the way, which you can make use of</p><br/><h4>How to Get Started & Other Tips:</h4><p><ol><li>1. Click on Teach button to get started</li><li>2. At any point you can press Save Task and Store as a Learned Action</li><li>3. The robot will not be able to pick up some objects if it thinks others are in the way</p></ol> </p>','answers':[]}
                 updateQuestionModal(message);
             }
