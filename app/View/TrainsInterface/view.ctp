@@ -426,7 +426,7 @@ $(function() {
 	 * when the user is dequeued, send them back to their account
 	 */
 	rosQueue.on('dequeue', function () {
-		location.reload();
+		
 	});
     rosQueue.updateQueueClient.advertise();
 
@@ -529,7 +529,7 @@ $(function() {
                         <div class="form-group" id="teach-task-name-div">
                             <label class="col-sm-3 control-label" for="htn-task-name">Task Name</label>
                             <div class="col-sm-6">
-                                <input type="text" id="htn-task-name" name="htn-task-name" class="form-control" placeholder="Pack Lunch 1 | Put Apple in Box" value=""/>
+                                <input type="text" id="htn-task-name" name="htn-task-name" class="form-control" placeholder="" value=""/>
                             </div>
                         </div>
                         <div class="form-group" id="teach-task-div">
@@ -743,12 +743,12 @@ $(function() {
                 current_question = '';
                 $("#question-text").html(message.question);
                 current_question = message.question;
-
-                if(message.question=='User End'){
+                console.log(message)
+                if(message.question=='User End' && message.answers[0]=='<?php echo $user_id?>'){
                     window.location.href = "/TrainsInterface/poststudy/1";
                 }
                 // Check for an AskForTaskName question and add a textbox for task name 
-                if(message.answers.length > 0 && message.answers[0] == "AskForTaskName") {
+                else if(message.answers.length > 0 && message.answers[0] == "AskForTaskName") {
                     $("#question-text").append('<div class="form-group">');
                     $("#question-text").append('<label class="col-sm-3 control-label" for="question-task-name">Task Name</label>');
                     $("#question-text").append('<input type="text" id="question-task-name" name="question-task-name" class="form-control" />');

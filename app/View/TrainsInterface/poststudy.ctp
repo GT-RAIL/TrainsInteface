@@ -78,6 +78,7 @@ echo $this->Html->css('TrainsInterface');
             'entry' :'{data:crowdflower,crowdflower_id:'+$('#crowdflower_id').val()+',user_id:<?php echo $user_id;?>}'
         },
         success: function () {
+            $('#crowdlower_code').html('TA3LE30T STU0Y'+$('#crowdflower_id').val())
             $('#crowdflower_id').css('display','none')
             $('#click_btn').css('display','none')
             $('#done').css('display','block')
