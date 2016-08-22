@@ -404,6 +404,23 @@ CREATE TABLE IF NOT EXISTS `mjpegs` (
 INSERT INTO `mjpegs` (`id`, `name`, `host`, `port`, `created`, `modified`) VALUES
 (1, 'Local MJPEG Server', 'localhost', 8080, '2016-03-02 19:45:14', '2016-03-02 19:45:14');
 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pointclouds`
+--
+CREATE TABLE IF NOT EXISTS `pointclouds` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for the entry.',
+  `topic` varchar(255) NOT NULL COMMENT 'Topic of the 3d point cloud.',
+  `stream` varchar(255) DEFAULT NULL  COMMENT 'Stream for the 3d point cloud.',
+  `tf_frame` varchar(255) DEFAULT NULL COMMENT  'The TF Frame for the point cloud',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'The time of entry creation.',
+  `modified` timestamp NULL DEFAULT NULL COMMENT 'The last edited time.',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `topic` (`topic`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 -- --------------------------------------------------------
 
 --
