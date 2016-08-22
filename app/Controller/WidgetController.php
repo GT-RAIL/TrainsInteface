@@ -26,7 +26,7 @@ class WidgetController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Stream', 'Teleop', 'Tf', 'Marker', 'Im', 'Resource', 'Urdf');
+	public $uses = array('Stream', 'Teleop', 'Tf', 'Marker', 'Im', 'Resource', 'Urdf','Pointcloud');
 
 /**
  * The used components for the controller.
@@ -46,6 +46,7 @@ class WidgetController extends AppController {
 		$this->set('streams', $this->Stream->find('all', array('recursive' => 2, 'order' => 'Stream.environment_id')));
 		$this->set('teleops', $this->Teleop->find('all', array('recursive' => 2, 'order' => 'Teleop.environment_id')));
 		$this->set('markers', $this->Marker->find('all', array('recursive' => 2, 'order' => 'Marker.environment_id')));
+		$this->set('pointclouds', $this->Pointcloud->find('all', array('recursive' => 2, 'order' => 'Pointcloud.environment_id')));
 		$this->set('ims', $this->Im->find('all', array('recursive' => 2, 'order' => 'Im.environment_id')));
 		$this->set('urdfs', $this->Urdf->find('all', array('recursive' => 2, 'order' => 'Urdf.environment_id')));
 		$this->set('resources', $this->Resource->find('all'));

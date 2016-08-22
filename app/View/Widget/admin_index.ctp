@@ -47,10 +47,13 @@
 				</section>
 			</div>
 			<div class="row">
-				<section class="6u">
+				<section class="4u">
 					<a href="#urdfs" class="button special scrolly">URDFs</a>
 				</section>
-				<section class="6u">
+				<section class="4u">
+					<a href="#pointclouds" class="button special scrolly">Point Clouds</a>
+				</section>
+				<section class="4u">
 					<a href="#resources" class="button special scrolly">Resource Servers</a>
 				</section>
 			</div>
@@ -401,6 +404,75 @@
 		</section>
 	</div>
 </section>
+<section id="pointclouds" class="wrapper style4 container">
+	<div class="content center">
+		<section>
+			<header>
+				<h2>Point Cloud Settings</h2>
+				<p>Point cloud settings store information about points clouds</p>
+			</header>
+			<?php
+			echo $this->Html->link(
+				'Create New Entry',
+				array('controller' => 'pointclouds', 'action' => 'add'),
+				array('class' => 'button')
+			);
+			?>
+			<br /><br />
+			<table>
+				<tr>
+					<th></th>
+					<th>ID</th>
+					<th>Topic</th>
+					<th>Stream</th>
+					<th>TF Frame</th>
+					<th><?php echo $this->Html->link('Environment', array('controller' => 'environments')); ?></th>
+				</tr>
+				<?php foreach ($pointclouds as $pointcloud): ?>
+					<tr>
+						<td>
+							<?php
+							echo $this->Form->postLink(
+								'',
+								array('controller' => 'pointclouds', 'action' => 'delete', $pointcloud['Pointcloud']['id']),
+								array('class' => 'icon fa-trash-o', 'confirm' => 'Are you sure?')
+							);
+							?>
+							<?php
+							echo $this->Html->link(
+								'',
+								array('controller' => 'pointclouds', 'action' => 'edit', $pointcloud['Pointcloud']['id']),
+								array('class' => 'icon fa-edit')
+							);
+							?>
+						</td>
+						<td data-title="ID">
+							<?php echo h($pointcloud['Pointcloud']['id']); ?>
+						</td>
+						<td data-title="Topic">
+							<?php
+							echo $this->Html->link(
+								$pointcloud['Pointcloud']['topic'],
+								array('controller' => 'pointclouds', 'action' => 'view', $pointcloud['Pointcloud']['id'])
+							);
+							?>
+						</td>
+						<td data-title="Stream">
+							<?php echo ($pointcloud['Pointcloud']['stream']) ? h($pointcloud['Pointcloud']['stream']) : 'None'; ?>
+						</td>
+						<td data-title="TF Frame">
+							<?php echo ($pointcloud['Pointcloud']['tf_frame']) ? h($pointcloud['Pointcloud']['tf_frame']) : 'None'; ?>
+						</td>
+						<td data-title="Environment">
+							<?php echo h($pointcloud['Environment']['name']); ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		</section>
+	</div>
+</section>
+
 
 <section id="urdfs" class="wrapper style4 container">
 	<div class="content center">

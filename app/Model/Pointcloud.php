@@ -1,17 +1,17 @@
 <?php
 /**
- * Mjpegs Model
+ * Point Clouds Model
  *
- * Mjpegs represent a MJPEG servers. It contains information about the port and host.
+ * PoointClouds represents the frames and streams of the point clouds
  *
  * @author		Carl Saldanha - csaldanha3@gatech.edu
  * @copyright	2016 Georgia Institute of Technology
- * @link		https://github.com/WPI-RAIL/rms
+ * @link		https://github.com/GT-RAIL/rms
  * @since		RMS v 2.0.0
  * @version		2.0.9
  * @package		app.Model
  */
-class Mjpeg extends AppModel {
+class Pointcloud extends AppModel {
 
 /**
  * The validation criteria for the model.
@@ -36,15 +36,15 @@ class Mjpeg extends AppModel {
 				'required' => 'update'
 			)
 		),
-		'name' => array(
+		'topic' => array(
 			'notEmpty' => array(
 				'rule' => 'notEmpty',
-				'message' => 'Please enter a valid name.',
+				'message' => 'Please enter a valid ROS point cloud topic.',
 				'required' => true
 			),
 			'maxLength' => array(
 				'rule' => array('maxLength', 255),
-				'message' => 'Names cannot be longer than 255 characters.',
+				'message' => 'Topics cannot be longer than 255 characters.',
 				'required' => true
 			),
 			'isUnique' => array(
@@ -53,10 +53,17 @@ class Mjpeg extends AppModel {
 				'required' => true
 			)
 		),
-		'host' => array(
+		'stream' => array(
+			'maxLength' => array(
+				'rule' => array('maxLength', 255),
+				'message' => 'Hosts cannot be longer than 255 characters.',
+				'required' => true
+			)
+		),
+		'tf_frame' => array(
 			'notEmpty' => array(
 				'rule' => 'notEmpty',
-				'message' => 'Please enter a valid host or IP.',
+				'message' => 'Please enter a valid TF Frame for the camera',
 				'required' => true
 			),
 			'maxLength' => array(
@@ -65,20 +72,15 @@ class Mjpeg extends AppModel {
 				'required' => true
 			)
 		),
-		'port' => array(
+		'environment_id' => array(
 			'notEmpty' => array(
 				'rule' => 'notEmpty',
-				'message' => 'Please enter a valid port.',
+				'message' => 'Please enter a valid environment.',
 				'required' => true
 			),
 			'gt' => array(
 				'rule' => array('comparison', '>', 0),
-				'message' => 'Ports must be greater than 0.',
-				'required' => true
-			),
-			'leq' => array(
-				'rule' => array('comparison', '<=', 65535),
-				'message' => 'Ports cannot be larger than 65535.',
+				'message' => 'Environment IDs must be greater than 0.',
 				'required' => true
 			)
 		),
@@ -99,9 +101,9 @@ class Mjpeg extends AppModel {
 	);
 
 /**
- * MJPEG servers may have many environments.
+ * All point clouds belong to a single environment.
  *
- * @var array
+ * @var string
  */
-	public $hasMany = array('Environment' => array('className' => 'Environment'));
+	public $belongsTo = 'Environment';
 }
