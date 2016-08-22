@@ -41,6 +41,7 @@ echo $this->Html->css('PuzzleBot3DInterface');
 	
 	<?php echo $this->Html->script('mjpegcanvas.js');?>
 	<?php echo $this->Html->script('ros3d.js');?>
+	<?php print_r($environment)?>
 
 
 	<?php

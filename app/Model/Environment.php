@@ -102,9 +102,12 @@ class Environment extends AppModel {
 		'Stream' => array('className' => 'Stream', 'dependent' => true),
 		'Teleop' => array('className' => 'Teleop', 'dependent' => true),
 		'Marker' => array('className' => 'Marker', 'dependent' => true),
+		'Pointcloud' => array('className' => 'Pointcloud', 'dependent' => false),
 		'Im' => array('className' => 'Im', 'dependent' => true),
 		'Urdf' => array('className' => 'Urdf', 'dependent' => true),
 		'Condition' => array('className' => 'Condition', 'dependent' => false)
+		
+
 	);
 
 /**
